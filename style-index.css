@@ -1,0 +1,102 @@
+
+.unafila {
+	margin-top: 20px;
+    margin-left: 30px;
+}
+
+.columna {
+  float: left;
+  padding: 20px;
+}
+
+/* Clear floats after image containers */
+.unafila::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.responsive-img {
+    height: 180px;
+    width: 100%; /* Se ajusta al contenedor */
+    max-width: 800px; /* Tamaño máximo en pantallas grandes */
+}
+
+@media screen and (max-width: 768px) {
+    .responsive-img {
+        width: 100%;
+        height: auto; /* Mantiene la proporción */
+    }
+}
+
+
+.upper-center-logo {
+  margin-top: 20px;
+  background-image: url("www/nuevo-encabezado.png");
+  height: 150px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.upper-right-logo {
+  margin-top: 20px;
+  background-image: url("www/LOGO-FINAL-01.png");
+  height: 150px;
+  background-size: contain;
+  background-position: right;
+  background-repeat: no-repeat;
+}
+
+
+.down-center-logo {
+  margin-top: 100px;
+  background-image: url("www/nuevo-logo-pba-sin-fondo.png");
+  height: 100px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #009aae;
+  }
+
+.title {
+    font-size: 50px !important;
+    font-family: Calibri, sans-serif;
+    font-weight: bolder;
+    color: #595959;
+}
+
+h1 {
+    font-size: 30px;
+    font-family: Calibri, sans-serif;
+    color: #009aae;
+    margin-top: 40px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+p {
+    margin: 0 0 10.5px;
+    font-family: Calibri, sans-serif;
+    font-size: 18px;
+}
+
+.tocify {
+    width: 20%;
+    max-height: 90%;
+    overflow: auto;
+    margin-left: 2%;
+    position: fixed;
+    border: 2px solid #009aae;
+    border-radius: 6px;
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    z-index: 2;
+    color: #ffffff;
+    background-color: #009aae;
+    border-color: #dddddd;
+}

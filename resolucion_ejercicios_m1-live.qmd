@@ -1,6 +1,6 @@
 ---
 title: "Resolución ejercitación módulo 1"
-author: "Nahuel Bargas"
+author: "Curso R - Intermedio"
 lang: es
 format:
   live-html:
@@ -8,13 +8,16 @@ format:
      number-sections: true
      toc_float: true
      theme: cosmo
+     include-in-header: logo-option.html
+     include-after-body: logo-option2.html
+     css: style-index.css
 engine: knitr
 editor: visual
 ---
 
 {{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
 
-# Resolución ejercitación  de repaso del módulo 1
+# Resolución ejercitación de repaso del módulo 1
 
 ## Ejercicio 1)
 
@@ -93,15 +96,11 @@ table(mtcars2$cyl,mtcars2$am) #<1>
 :::
 :::::
 
-
-
-
 ## Ejercicio 2)
 
 ### Consigna
 
--  Si queremos separar la distribución del peso de los vehículos (**wt** en **mtcars**) en cuatro intervalos con límites abiertos a la derecha, ¿entre que valores queda comprendido el tercer intervalo? ¿Cuál es la frecuencia absoluta acumulada al tercer intervalo? 
-### Resolución
+-   Si queremos separar la distribución del peso de los vehículos (**wt** en **mtcars**) en cuatro intervalos con límites abiertos a la derecha, ¿entre que valores queda comprendido el tercer intervalo? ¿Cuál es la frecuencia absoluta acumulada al tercer intervalo? \### Resolución
 
 Primero podemos ver los límites de los cuatro intervalos y su frequencia.
 
@@ -128,15 +127,12 @@ tabla_freq_acu_wt
 
 ```
 
-
 ## Pista
 
 ::: {.hint exercise="ex_2"}
 -   Pueden usar la función **table()** en conjunción con **cut()** para conocer las frequencias de cada intervalo.
 -   No olvidarse de indicar el nombre de la variable tras el símbolo '\$' y la cantidad de intervalos que quieren separar a la variable continua.
--   Con ```cumsum()``` se puede ver la suma acumulada de esa tabla de frecuencias.
-
-
+-   Con `cumsum()` se puede ver la suma acumulada de esa tabla de frecuencias.
 :::
 
 ## Solución
@@ -158,18 +154,15 @@ tabla_freq_acu_wt
     
 cumsum(table(cut(mtcars$wt, breaks = 4, right = FALSE)))
    
-
 ```
-
 :::
 :::::
-
 
 ## Ejercicio 3)
 
 ### Consigna
 
--  Si se grafica la distribución de **wt** en un histograma, ¿en cuántos intervalos queda distribuida la muestra?
+-   Si se grafica la distribución de **wt** en un histograma, ¿en cuántos intervalos queda distribuida la muestra?
 
 ### Resolución
 
@@ -190,10 +183,8 @@ ______(mtcars$______)
 -   Un histograma puede graficarse con **hist()**
 -   No olvidarse de indicar el nombre de las variable tras el símbolo '\$'.
 -   Al utilizar la función **hist()**, uno de los intervalos no tendrá observaciones
-
-
 :::
-    
+
 ## Solución
 
 ::: {.solution exercise="ex_2"}
@@ -204,9 +195,8 @@ hist(mtcars$wt)
 # o:
 
 ggplot(mtcars,aes(mpg)) + geom_histogram() #<1>
-
 ```
 
-1. Los intervalos que se obtienen por defecto  al aplicar **hist()** difieren de los que se obtendrían con **geom_histogram()** de **ggplot**. 
+1.  Los intervalos que se obtienen por defecto al aplicar **hist()** difieren de los que se obtendrían con **geom_histogram()** de **ggplot**.
 :::
-:::::    
+:::::

@@ -1,0 +1,18 @@
+---
+title: "'PROGRAMA R - NIVEL INTERMEDIO'"
+subtitle: Ejercicios prácticos optativos
+output:
+   bookdown::html_document2:
+     theme: cerulean
+     css: style-index.css
+     includes:
+      before_body: logo-option.html
+      after_body:  logo-option2.html
+---
+
+
+Estos ejercicios corresponden a la **primera edición** del año **2025** del curso 'PROGRAMA R - NIVEL INTERMEDIO' desarrollado en la [Escuela de Economía y Gestión](https://escuelamunicipal.economia.gba.gob.ar/) del **Ministerio de Economía de la Provincia de Buenos Aires**.
+
+Haciendo clicks a los siquientes links podrán acceder a los documentos para prácticar online la resolución de los ejercicios:
+
+<a href="https://nahuelbargas.github.io/res_ejer_R_intermedio_EEG/resolucion_ejercicios_m1-live.html"> Ejercicios del módulo 1 </a>
