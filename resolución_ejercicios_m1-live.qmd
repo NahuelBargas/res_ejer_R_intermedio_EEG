@@ -1,0 +1,212 @@
+---
+title: "Resolución ejercitación módulo 1"
+author: "Nahuel Bargas"
+lang: es
+format:
+  live-html:
+     toc: true
+     number-sections: true
+     toc_float: true
+     theme: cosmo
+engine: knitr
+editor: visual
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Resolución ejercitación  de repaso del módulo 1
+
+## Ejercicio 1)
+
+### Consigna
+
+-   En base a la base **mtcars2**, ¿Cuántos autos que tienen 8 cilindros poseen una caja automática? ¿Cuántos modelos con 4 cilindros tienen una caja manual?
+
+### Resolución
+
+```{webr}
+#| warning: false
+#| edit: false
+library(dplyr)
+
+```
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+#| setup: true
+#| exercise: ex_1
+library(dplyr)
+```
+
+```{webr}
+
+#| exercise: ex_1
+# Primero que hay que transformar algunas variables con valores únicos o dicotómicas de la base *mtcars* a la clase factor.
+
+mtcars2  <-  mtcars %>% 
+  mutate(
+    vs   = factor(vs, labels = c("V", "S")),
+    am   = factor(am, labels = c("automatic", "manual")),
+    cyl  = ordered(cyl), 
+    gear = ordered(gear),
+    carb = ordered(carb)
+)
+
+
+
+______(mtcars2$______,mtcars2$______)
+```
+
+## Pista
+
+::: {.hint exercise="ex_1"}
+-   Pueden usar la función **table()**.
+-   No olvidarse de indicar el nombre de las variables tras el símbolo '\$':
+
+``` r
+table(______)
+```
+:::
+
+## Solución
+
+::: {.solution exercise="ex_1"}
+``` r
+
+mtcars2  <-  mtcars %>% 
+  mutate(
+    vs   = factor(vs, labels = c("V", "S")),
+    am   = factor(am, labels = c("automatic", "manual")),
+    cyl  = ordered(cyl), 
+    gear = ordered(gear),
+    carb = ordered(carb)
+)
+
+
+
+table(mtcars2$cyl,mtcars2$am) #<1>
+```
+
+1.  Utilizar la función **table()** sobre las variables **cyl** y **am** del objeto **mtcars2**
+:::
+:::::
+
+
+
+
+## Ejercicio 2)
+
+### Consigna
+
+-  Si queremos separar la distribución del peso de los vehículos (**wt** en **mtcars**) en cuatro intervalos con límites abiertos a la derecha, ¿entre que valores queda comprendido el tercer intervalo? ¿Cuál es la frecuencia absoluta acumulada al tercer intervalo? 
+### Resolución
+
+Primero podemos ver los límites de los cuatro intervalos y su frequencia.
+
+Y luego ver la suma acumulada de esa tabla de frecuencias
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+
+#| exercise: ex_2
+
+
+
+tabla_freq_wt <-  ______(______(mtcars$______, breaks = ______, right = FALSE)) 
+
+tabla_freq_wt 
+
+
+
+tabla_freq_acu_wt <-  ______(tabla_freq_wt)
+
+tabla_freq_acu_wt
+
+```
+
+
+## Pista
+
+::: {.hint exercise="ex_2"}
+-   Pueden usar la función **table()** en conjunción con **cut()** para conocer las frequencias de cada intervalo.
+-   No olvidarse de indicar el nombre de la variable tras el símbolo '\$' y la cantidad de intervalos que quieren separar a la variable continua.
+-   Con ```cumsum()``` se puede ver la suma acumulada de esa tabla de frecuencias.
+
+
+:::
+
+## Solución
+
+::: {.solution exercise="ex_2"}
+``` r
+
+tabla_freq_wt <-  table(cut(mtcars$wt, breaks = 4, right = FALSE)) 
+
+tabla_freq_wt 
+
+
+tabla_freq_acu_wt <-  cumsum(tabla_freq_wt)
+
+tabla_freq_acu_wt
+
+
+# También se podría haber realizado todo en una misma línea:
+    
+cumsum(table(cut(mtcars$wt, breaks = 4, right = FALSE)))
+   
+
+```
+
+:::
+:::::
+
+
+## Ejercicio 3)
+
+### Consigna
+
+-  Si se grafica la distribución de **wt** en un histograma, ¿en cuántos intervalos queda distribuida la muestra?
+
+### Resolución
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+
+#| exercise: ex_3
+
+______(mtcars$______)
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_3"}
+-   Un histograma puede graficarse con **hist()**
+-   No olvidarse de indicar el nombre de las variable tras el símbolo '\$'.
+-   Al utilizar la función **hist()**, uno de los intervalos no tendrá observaciones
+
+
+:::
+    
+## Solución
+
+::: {.solution exercise="ex_2"}
+``` r
+
+hist(mtcars$wt)
+
+# o:
+
+ggplot(mtcars,aes(mpg)) + geom_histogram() #<1>
+
+```
+
+1. Los intervalos que se obtienen por defecto  al aplicar **hist()** difieren de los que se obtendrían con **geom_histogram()** de **ggplot**. 
+:::
+:::::    
