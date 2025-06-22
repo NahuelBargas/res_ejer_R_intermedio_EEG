@@ -86,7 +86,6 @@ gapminder_2002_selec <- gapminder_2002[sample(x = nrow(gapminder_2002), size = 1
 
 
 gapminder_2002_selec %>% arrange(desc(lifeExp)) #<4>
-
 ```
 
 1.  Con `set.seed(5)` se establece el número pseudoaleatorio que nos permitirá obtener el mismo resultado cada vez que ejecutemos los comandos.
@@ -233,7 +232,7 @@ flights %>%
 ```
 
 1.  Agrupamos por **mes**.
-2.  Posteriormente se utiliza `mean()` para calcular el promedio del los minutos en el aire para cada vuelo cada mes en una nueva variable **gdp_prom** . Con **na.rm = TRUE** excluímos los valores faltantes dle cálculo, de lo contrario el promedio quedaría con valor `NA`.
+2.  Posteriormente se utiliza `mean()` para calcular el promedio del los minutos en el aire para cada vuelo cada mes en una nueva variable **gdp_prom** . Con **na.rm = TRUE** excluímos los valores faltantes del cálculo, de lo contrario el promedio quedaría con valor `NA`.
 3.  Agregamos `desc()` dentro de `arrange()` para que nos quede arriba el mes con mayor promedio.
 :::
 :::::
