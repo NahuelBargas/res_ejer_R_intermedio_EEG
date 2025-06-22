@@ -16,3 +16,5 @@ Estos ejercicios corresponden a la **primera edición** del año **2025** del cu
 Haciendo clicks a los siquientes links podrán acceder a los documentos para prácticar online la resolución de los ejercicios:
 
 <a href="https://nahuelbargas.github.io/res_ejer_R_intermedio_EEG/resolucion_ejercicios_m1-live.html"> Ejercicios del módulo 1 </a>
+
+<a href="https://nahuelbargas.github.io/res_ejer_R_intermedio_EEG/resolucion_ejercicios_m2-live.html"> Ejercicios del módulo 2 </a>

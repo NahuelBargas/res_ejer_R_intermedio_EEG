@@ -1,0 +1,239 @@
+---
+title: "Resolución ejercitación módulo 2"
+author: "Curso R - Intermedio"
+lang: es
+format:
+  live-html:
+     toc: true
+     number-sections: true
+     toc_float: true
+     theme: cosmo
+     include-in-header: logo-option.html
+     include-after-body: logo-option2.html
+     css: style-index.css
+engine: knitr
+editor: visual
+embed-resources: true
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Resolución ejercitación de repaso del módulo 2
+
+## Ejercicio 1)
+
+### Consigna
+
+-   Establezca un número pseudoaleatorio de 5 y muestre en una tabla 15 registros tomados de una muestra aleatoria de la base **gapminder** para el año 2002, ordenados por **lifeExp** de forma descendente.
+
+### Resolución
+
+```{r}
+#| warning: false
+#| edit: false
+#| evaluate: false
+library(tidyverse)
+library(gapminder)
+```
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+#| setup: true
+#| exercise: ex_1
+library(dplyr)
+library(tidyr)
+library(gapminder)
+library(nycflights13)
+```
+
+```{webr}
+
+#| exercise: ex_1
+______(5)
+
+gapminder_2002 <- gapminder %>% 
+                    ______(______==2002)
+
+gapminder_2002_selec <- gapminder_2002[______(x = nrow(gapminder_2002), ______ = 15, replace = FALSE),]
+
+
+gapminder_2002_selec %>% ______(desc(______))
+
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_1"}
+-   Pueden usar la función **set.seed()** para establecer el número pseudoaleatorio.
+-   La función **sample()** permite tomar una muestra aleatoria. Revisar el nombre de la opción que permite seleccionar el tamaño.
+-   No olvidarse de utilizar las funciones que permiten filtrar y ordenar un *data.frame*, el ejercicio esta armado para usar las funciones de la librería **dplyr** pero puede también resolverse con las propias de **R-base**.
+:::
+
+## Solución
+
+::: {.solution exercise="ex_1"}
+``` r
+
+set.seed(5) #<1>
+
+gapminder_2002 <- gapminder %>% 
+                    filter (year==2002) #<2>
+
+gapminder_2002_selec <- gapminder_2002[sample(x = nrow(gapminder_2002), size = 15, replace = FALSE),] #<3>
+
+
+gapminder_2002_selec %>% arrange(desc(lifeExp)) #<4>
+
+```
+
+1.  Con `set.seed(5)` se establece el número pseudoaleatorio que nos permitirá obtener el mismo resultado cada vez que ejecutemos los comandos.
+2.  Con `filter()` filtraremos el *data.frame* para el año 2002.
+3.  `sample()` nos permitirá obtener la muestra de 15 observaciones, que indicaremos en la opción **size**.
+4.  Con `arrange()` en conjunción con `desc()` tendremos nuestra muestra de la base **gapminder** para el año 2002 ordenada de mayor a menor según la esperanza de vida(**lifeExp**).
+:::
+:::::
+
+## Ejercicio 2)
+
+### Consigna
+
+-   Calcule el promedio del **gdpPercap** para cada año por continente de la base **gapminder**. Genere posteriormente una tabla donde una de sus columnas sea el nombre del continente, y el resto, los promedios calculados anteriormente para cada año.
+
+### Resolución
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+
+#| exercise: ex_2
+#| warning: false
+#| message: false
+
+gapminder %>% 
+  ______(continent,year)%>%
+  summarise(gdp_prom = ______(gdpPercap))%>%
+  ungroup()%>%
+  ______(names_from='year',______='gdp_prom')
+  
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_2"}
+-   Para obtener el promedio por año y continente, deberán agrupar por dichas variables. Pueden realizar el agrupamiento por fuera de `summarise()` o dentro de la función, el *data.frame* será el mismo pero con distinto ordenamiento.
+-   Las columnas que no correspondan a los nombres de los continentes deben tener como nombres de columnas los años de la base, por ende, quedará un *data.frame* ensanchado, recuerde aplicar `pivot_wider()`.
+:::
+
+## Solución
+
+::: {.solution exercise="ex_2"}
+``` r
+gapminder %>% 
+  group_by(continent,year)%>% #<1>
+  summarise(gdp_prom = mean(gdpPercap))%>% #<2>
+  ungroup()%>%
+  pivot_wider(names_from='year',values_from='gdp_prom') #<3>
+
+
+# lo mismo pero con otro orden
+gapminder %>% 
+  summarise(gdp_prom = mean(gdpPercap), .by =c(continent,year))%>%
+  pivot_wider(names_from='year',values_from='gdp_prom')
+   
+```
+
+1.  Agrupamos por *continent* e *year* usando `group_by()` para realizar los cálculos en base a dicho grupo.
+2.  Posteriormente se utiliza `mean()` para calcular el promedio del producto per cápita para cada grupo en una nueva variable **gdp_prom** .
+3.  Incrementamos las columnas del *data.frame* con `pivot_wider()`, los valores de las columnas correspondientes a cada serán los respectivos a la variable **gdp_prom**.
+:::
+:::::
+
+## Ejercicio 3)
+
+### Consigna
+
+-   En el ejemplo `gapminder %>% anti_join(gapminder_ingreso)` al final de la sección **Datos Relacionales** se mostró que 108 filas de la base **gapminder** no tenían su correlato en la base **gapminder_ingreso**. Tomen las medidas necesarias para que la aplicación de `anti_join()` sobre las bases anteriormente mencionadas no incluya entre sus filas los datos relacionados con los Estados Unidos. **Pista:** Deberán trabajar previamente sobre una de las bases tal cómo se mostró en el módulo, y procurar que en ambas bases el nombre para identificar a los Estados Unidos sea el mismo.
+
+### Resolución
+
+Este ejercicio es largo y requiere crear varios objetos. Para ver como crear cada objeto pueden repasar el código en el módulo 2. Aquí les brindaremos solamente la solución. En este caso, la clave es modificar el nombre de los Estados Unidos en una de las bases donde se realiza la unión. En este caso, se optará por modificar el nombre del país al momento de la creación de **ingreso_diario_long**. Se muestran dos alternativas:
+
+```{r,eval=FALSE}
+
+
+# con case_when():
+# Cambiamos el nombre de USA por  United States
+ingreso_diario_long  <- ingreso_diario %>%
+                           mutate(country = case_when(
+                                             country =='USA' ~ 'United States',
+                                             .default = country)) %>%
+                           pivot_longer(- country, names_to='year',values_to='ingreso_promedio',
+                                        names_transform = list(year = as.integer))
+
+
+
+# con ifelse():
+
+# Cambiamos el nombre de USA por  United States
+ingreso_diario_long  <- ingreso_diario %>%
+                           mutate(country = ifelse(country =='USA','United States',country))%>%
+                           pivot_longer(- country, names_to='year',values_to='ingreso_promedio',
+                                        names_transform = list(year = as.integer))
+
+```
+
+## Ejercicio 4)
+
+### Consigna
+
+-   La variable **air_time** de la base **flights** registra los minutos en el aire para cada vuelo. ¿En qué mes se registró el mayor promedio?
+
+### Resolución
+
+```{r}
+#| warning: false
+#| edit: false
+#| evaluate: false
+library(nycflights13)
+```
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+
+#| exercise: ex_4
+flights %>%
+ ______(month) %>%
+ summarise('promedio_geom' = mean(______))%>%
+ arrange(______(promedio_geom))
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_4"}
+-   Tendrán que agrupar y calcular la media aritmética.
+-   Prestar atención en excluir los valores faltantes del cálculo de la media.
+:::
+
+## Solución
+
+::: {.solution exercise="ex_4"}
+``` r
+flights %>%
+ group_by(month) %>% #<1>
+ summarise('promedio_geom' = mean(air_time,na.rm = TRUE))%>% #<2>
+ arrange(desc(promedio_geom)) #<3>
+```
+
+1.  Agrupamos por **mes**.
+2.  Posteriormente se utiliza `mean()` para calcular el promedio del los minutos en el aire para cada vuelo cada mes en una nueva variable **gdp_prom** . Con **na.rm = TRUE** excluímos los valores faltantes dle cálculo, de lo contrario el promedio quedaría con valor `NA`.
+3.  Agregamos `desc()` dentro de `arrange()` para que nos quede arriba el mes con mayor promedio.
+:::
+:::::
