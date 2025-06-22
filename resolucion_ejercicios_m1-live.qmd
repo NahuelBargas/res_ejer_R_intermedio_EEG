@@ -42,6 +42,7 @@ library(dplyr)
 #| setup: true
 #| exercise: ex_1
 library(dplyr)
+library(ggplot2)
 ```
 
 ```{webr}
@@ -101,7 +102,9 @@ table(mtcars2$cyl,mtcars2$am) #<1>
 
 ### Consigna
 
--   Si queremos separar la distribución del peso de los vehículos (**wt** en **mtcars**) en cuatro intervalos con límites abiertos a la derecha, ¿entre que valores queda comprendido el tercer intervalo? ¿Cuál es la frecuencia absoluta acumulada al tercer intervalo? \### Resolución
+-   Si queremos separar la distribución del peso de los vehículos (**wt** en **mtcars**) en cuatro intervalos con límites abiertos a la derecha, ¿entre que valores queda comprendido el tercer intervalo? ¿Cuál es la frecuencia absoluta acumulada al tercer intervalo? 
+
+### Resolución
 
 Primero podemos ver los límites de los cuatro intervalos y su frequencia.
 
@@ -195,7 +198,7 @@ hist(mtcars$wt)
 
 # o:
 
-ggplot(mtcars,aes(mpg)) + geom_histogram() #<1>
+ggplot(mtcars,aes(wt)) + geom_histogram() #<1>
 ```
 
 1.  Los intervalos que se obtienen por defecto al aplicar **hist()** difieren de los que se obtendrían con **geom_histogram()** de **ggplot**.
