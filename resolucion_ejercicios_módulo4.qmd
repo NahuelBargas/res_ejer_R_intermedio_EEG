@@ -1,0 +1,174 @@
+---
+title: "Resolución ejercitación de la nota del Módulo 4. Transformación de datos"
+author: 'Curso - Introducción al programa R'
+lang: es
+format:
+  live-html:
+     toc: true
+     number-sections: true
+     toc_float: true
+     theme: cosmo
+     include-in-header: logo-option.html
+     include-after-body: logo-option2.html
+     css: style-index.css
+engine: knitr
+editor: visual
+embed-resources: true
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Resolución ejercitación de repaso
+
+## Ejercicio 1)
+
+### Consigna
+
+-   Agregue a la base **gapminder** una nueva columna con el promedio del PIB per cápita de toda la muestra para cada país. Ordene los resultados por el año de menor a mayor.
+
+### Resolución
+
+-   Reemplazar los '\_\_\_\_\_\_' por los comandos:
+
+```{webr}
+#| warning: false
+#| edit: false
+library(dplyr)
+library(gapminder)
+
+```
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+#| setup: true
+#| exercise: ex_1
+library(dplyr)
+library(gapminder)
+
+str(gapminder)
+```
+
+```{webr}
+
+#| exercise: ex_1
+
+gapminder_prom <- gapminder %>% 
+                    group_by(______)%>%
+					______(pib_promedio_muestra = ______(gdpPercap))%>%
+					ungroup()%>%
+                    ______(year)
+					
+str(gapminder_prom)
+
+
+
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_1"}
+-   Hay que agrupar la base por una variable y realizar una operación para calcular el promedio. Luego aplicar una función para ordenar los registros en base a otra de las variables del *data.frame*.
+:::
+
+## Solución
+
+::: {.solution exercise="ex_1"}
+``` r
+
+gapminder_prom <- gapminder %>% 
+                    group_by(country)%>% #<1>
+                    mutate(pib_promedio_muestra = mean(gdpPercap))%>% #<2>
+                    ungroup()%>%
+                    arrange(year)#<3>
+                    
+str(gapminder_prom)
+
+# en menos líneas
+
+gapminder_prom <-   gapminder %>% 
+                    mutate(pib_promedio_muestra = mean(gdpPercap),.by= country) 
+                    
+           
+```
+
+1.  Agrupamos por la variable **country** de **gapminder** para que la operación posterior se realice a nivel país.
+2.  Con la función **mean()** calculamos el promedio en la muestra para cada país, y creamos una nueva variable con **mutate()**.
+3.  Usando **arrange()** ordenamos, por defecto, la tabla de menor a mayor, en este caso, teniendo en cuenta el año.
+:::
+:::::
+
+## Ejercicio 2)
+
+### Consigna
+
+-   
+
+    a)  ¿Cuál fue la variación en el promedio de esperanza de vida entre los años 2002-2007, a nivel continente? b) ¿Cuál continente tuvo el mayor aumento? ¿Quién lo siguió?
+
+### Resolución
+
+-   Reemplazar los '\_\_\_\_\_\_' por los comandos:
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+
+#| exercise: ex_2
+
+# a)
+gapminder_año <- gapminder %>% 
+  filter(year %in% c(______))%>%
+  group_by( ______) %>% 
+   ______(esperanza_vida_promedio =  ______(lifeExp))%>%
+  mutate(var_esperanza_vida_promedio = ((esperanza_vida_promedio/ ______(esperanza_vida_promedio,n=1)-1)*100))
+  
+gapminder_año
+
+
+# b)
+gapminder_año %>%
+  ungroup()%>%
+  ______(var_esperanza_vida_promedio,n=2)
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_2"}
+-   Hay que filtrar la base y agruparla.
+-   Luego deberán 'resumir' la base con el promedio de esperanza de vida para cada continente y año.
+-   Puden calcular la variación de la esperanza de vida promedio en base a los valores previos de la variable.
+-   Para el inciso b) podrán utilizar una función que les traiga los dos mayores valores de la variación de la esperanza de vida (si la calculan). Si no, pueden filtrar la base para responder la pregunta.
+:::
+
+## Solución
+
+::: {.solution exercise="ex_2"}
+``` r
+
+# a) 
+gapminder_año <- gapminder %>% 
+  filter(year %in% c(2002,2007))%>% #<1>
+  group_by(continent,year) %>%  #<2>
+  summarise(esperanza_vida_promedio = mean(lifeExp))%>% #<3>
+  mutate(var_esperanza_vida_promedio = ((esperanza_vida_promedio/lag(esperanza_vida_promedio,n=1)-1)*100)) #<4>
+
+gapminder_año
+
+# b)
+gapminder_año %>%
+  ungroup()%>%
+  slice_max(var_esperanza_vida_promedio,n=2) #<5>
+```
+
+1.  Aplicamos la función **filter()** para realizar un filtrado en base a los años 2002 y 2007.
+2.  Agrupamos a nivel continente y año.
+3.  Se calcula la medida de resumen con el promedio de la esperanza de vida a nivel continente para cada año.
+4.  Se crea la variable **var_esperanza_vida_promedio** calculando la variación del promedio de la esperanza de vida trayendo sus valor previo gracias al uso de `lag(...,n=1)`. Ya que no se calculó el promedio para un año previo a 2002, en 2002 esta variable tiene valor NA.
+5.  Nos traemos las dos mayores variaciones usando de **var_esperanza_vida_promedio** usando `slice_max(...,n=2)`
+:::
+:::::

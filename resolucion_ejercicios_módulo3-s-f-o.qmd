@@ -1,0 +1,209 @@
+---
+title: "Resolución ejercitación de la nota del Módulo 3. Manejo de datos. Selección, filtrado y ordenamiento"
+author: 'Curso - Introducción al programa R'
+lang: es
+format:
+  live-html:
+     toc: true
+     number-sections: true
+     toc_float: true
+     theme: cosmo
+     include-in-header: logo-option.html
+     include-after-body: logo-option2.html
+     css: style-index.css
+engine: knitr
+editor: visual
+embed-resources: true
+---
+
+{{< include ./_extensions/r-wasm/live/_knitr.qmd >}}
+
+# Resolución ejercitación de repaso
+
+## Ejercicio 1)
+
+### Consigna
+
+-   Escribir los comandos para seleccionar la columna en la base **gapminder** que contiene la letra **'y'** en su nombre y sea de tipo de **factor**. Luego, escribir el código para seleccionar todas las variables de **gapminder** cuyo nombre comience con la letra **"c"**.
+
+### Resolución
+
+-   Reemplazar los '\_\_\_\_\_\_' por los comandos:
+
+```{webr}
+#| warning: false
+#| edit: false
+library(dplyr)
+library(gapminder)
+
+```
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+#| setup: true
+#| exercise: ex_1
+library(dplyr)
+library(gapminder)
+```
+
+```{webr}
+
+#| exercise: ex_1
+
+gapminder  %>% 
+    select(______("y") & 
+            ______(is.factor)
+           )
+
+
+
+
+
+gapminder  %>% 
+    select( ______("c")
+           )
+
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_1"}
+-   En ambos casos consultar la ayuda de la función `contains()` les será de utilidad (Pueden hacerlo con la siguiente ejecución: `?tidyselect::contains`)
+
+``` r
+?tidyselect::contains
+```
+:::
+
+## Solución
+
+::: {.solution exercise="ex_1"}
+``` r
+
+gapminder  %>% 
+    select(contains("y") & #<1>
+           where(is.factor)#<2>
+           )
+
+gapminder  %>% 
+    select(starts_with("c")#<3>
+           )
+           
+```
+
+1.  Utilizar la función **contains()** sobre las variables de **gapminder** para seleccionar **country** e **year**, que poseen la letra *y* en su nombre. Luego con el símbolo **&** se indica la próxima condición.
+2.  Con la función **where()** seleccionamos las variables que contienen la letra *y* en su nombre pero además son factores.
+3.  La función **starts_with()** nos permitirá seleccionar columnas que comiencen con un prefijo.
+:::
+:::::
+
+## Ejercicio 2)
+
+### Consigna
+
+-   ¿Cuántos registros con países europeos existen en la base **gapminder** en la década del 60?
+
+### Resolución
+
+-   Reemplazar los '\_\_\_\_\_\_' por los comandos:
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+
+#| exercise: ex_2
+gapminder %>%
+  ______(______ == "Europe" & 
+  (year %in% c(______))
+        )
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_2"}
+-   Deberán aplicar un par de filtros sobre la base.
+-   La respuesta correcta es superior a 50.
+-   Pueden consultar los años que posee la base con `unique(gapminder$year)`. Esto les posibilitará mejorar el filtrado.
+:::
+
+## Solución
+
+::: {.solution exercise="ex_2"}
+``` r
+
+gapminder %>%
+  filter(continent == "Europe" & (year %in% c(1962,1967))) #<1>
+
+
+# si queremos ver las filas de ese filtrado solamente
+gapminder %>%
+  filter(continent == "Europe" & (year %in% c(1962,1967)))%>%
+  nrow() #<2>
+```
+
+1.  Aplicamos la función **filter()** para realizar un filtrado en base a dos condiciones que deben cumplirse dentro de **gapminder**: Se seleccionan los registros de los países del continente europeo y de dos años de la década del 60.
+2.  Con la función **nrow()** podremos imprimir solamente el número de filas de nuestra selección previa.
+:::
+:::::
+
+## Ejercicio 3)
+
+### Consigna
+
+-   ¿Cuántos países tuvieron en el año 2002 un PBI per cápita superior a la media de dicho año? ¿Cuál es el país con mayor PBI per cápita en dicho año?
+
+### Resolución
+
+-   Reemplazar los '\_\_\_\_\_\_' por los comandos:
+
+::::: panel-tabset
+## Ejercicio
+
+```{webr}
+
+#| exercise: ex_3
+gapminder %>%
+  filter( ______)%>%
+  filter(gdpPercap > ______(gdpPercap))%>%
+  ______(______(gdpPercap))
+
+```
+
+## Pista
+
+::: {.hint exercise="ex_3"}
+-   Deberán aplicar un par de filtros sobre la base.
+-   Calcular la media del PBI per cápita.
+-   Utilizar alguna de las funciones ejemplificadas en el módulo para ordenar los resultados.
+-   Con respecto a la primera pregunta, el resultado es superior a 40.
+:::
+
+## Solución
+
+::: {.solution exercise="ex_2"}
+``` r
+
+gapminder %>%
+  filter( year == 2002)%>% #<1>
+  filter(gdpPercap > mean(gdpPercap))%>% #<2>
+  arrange(desc(gdpPercap)) #<3>
+  
+# para ver solamente el país con mayor valor del PBI per cápita(del 2002):
+
+gapminder %>%
+  filter( year == 2002)%>%
+  filter(gdpPercap > mean(gdpPercap))%>%
+  slice_max(gdpPercap, n= 1) #<4>  
+```
+
+1.  Filtramos primero por el año 2002.
+2.  Luego filtramos por aquellos valores de **gdpPercap** superior a la media de ese año . **Ojo!**: Hacer `filter( year == 2002 & gdpPercap > mean(gdpPercap))` arrojaría un resultado diferente, porque la media se calcularía sobre toda la base.
+3.  Con `arrange() en conjunción con desc()` ordenamos la base en forma descendente en relación a **gdpPercap**.
+4.  `slice_max()` nos permite el mayor valor de **gdpPercap** entre los registros de nuestra selección previa.
+:::
+:::::
